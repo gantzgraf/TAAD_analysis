@@ -20,17 +20,23 @@ def main(yale_phenotype, yale_all_variants, yale_most_damaging,
         DataFrames to produce cleaned data, tables and plots within the output
         directory.
     '''
+    # create output dirs
+    if not os.path.exists(FILE_PATH+'/output/'):
+        for sub_dir in ['cleaned_data', 'plots', 'tables']:
+            os.makedirs(FILE_PATH+'/output/'+sub_dir)
+    # create and clean all variants DataFrame
     all_tuple = av.create_all_variants(yale_phenotype, yale_all_variants, 
                                        uk_phenotype, uk_all_variants)
     UK_all_variants, Yale_all_variants, all_variants = all_tuple
     all_variants.reset_index(inplace=True)
+    # create and clean most damaging DataFrame
     most_damaging = md.create_most_damaging(UK_all_variants, uk_most_damaging, uk_phenotype,
                                             Yale_all_variants, yale_most_damaging, yale_phenotype,
                                             yale_survival, FILE_PATH)
+    # output both DataFrames as CSV file
     all_variants.to_csv(FILE_PATH+"/output/cleaned_data/All_Variants.csv")
-
     most_damaging.to_csv(FILE_PATH+"/output/cleaned_data/Most_Damaging.csv")
-
+    # used most damaging DataFrame to produce plots and tables
     tables(most_damaging, all_variants)
     plots(most_damaging)
 

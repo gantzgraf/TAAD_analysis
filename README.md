@@ -30,13 +30,6 @@ input_files/
 ├── Yale_Phenotype_Data.csv
 └── Yale_Survival_Data_Clean.csv
 ```
-An empty output directory should also exist and contain:
-```
-output/
-├── cleaned_data/
-├── plots/
-└── tables/
-```
 
 ## Data Cleaning
 The most damaging data is cleaned and combined and ultimately used to produce all the plots, tables and most of the data mentioned in the paper. The all variants data primary use is for helping to select the next most damaging variant. Each major step in the most damaging data cleaning process, and the sub-package (if any) used to achieve said step, are detailed below:
