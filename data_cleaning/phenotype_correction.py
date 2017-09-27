@@ -4,6 +4,9 @@ import numpy as np
 def phenotype_resolver(df, phenotype_columns):
     ''' Differences in phenotype data between duplicate samples are corrected/reported
         and any samples that subsequently have no phenotype data are removed.
+
+    Args:
+        phenotype_columns: a list of phenotype columns 
     '''
     # duplicate samples with different phenotype information are dealt with here
     df = duplicate_column_checker(df, phenotype_columns)
@@ -11,7 +14,7 @@ def phenotype_resolver(df, phenotype_columns):
     # get index numbers for all phenotype columns and filter out rows that have no phenotype data
     pheno_col_ix = [df.columns.get_loc(x) for x in phenotype_columns]
     df['Any Data'] = df.apply(lambda x: phenotype_data(x, pheno_col_ix), axis=1)
-    print("Number of samples without phenotype data: {}\n".format(len(df[df['Any Data'] == "no"])))
+    print("\nINFO: Number of samples without phenotype data: {}\n".format(len(df[df['Any Data'] == "no"])))
     df = df[~df['Any Data'].str.contains("no")]
 
     return df
@@ -76,7 +79,6 @@ def duplicate_column_checker(df, columns_names, order=False, recurs=2,
     # do the same but reverse the order of secondary order
     return duplicate_column_checker(df, columns_names, order=True, recurs=recurs-1, dup_ends=dup_ends)
 
-
 def duplicates_column_diff(df, col_ix, column):
     ''' Find duplicate samples and communicate whether they have different in values in the given column indexes.
 
@@ -118,8 +120,6 @@ def duplicates_column_diff(df, col_ix, column):
     # save a file which describes the duplicate samples that have different info in the given column indexes
     # pd.DataFrame(data=diff_entries).to_csv(file_path+"error_diff_duplicate_entries_data.csv")
 
-
-
 def phenotype_data(x, col_ix):
     ''' Check whether we have any data in the fields in the given column indexes.
     Args:
@@ -129,7 +129,7 @@ def phenotype_data(x, col_ix):
     pheno_cells = x[col_ix].tolist()
     all_row_cell_values = set([z for z in pheno_cells if str(z) != 'nan'])
 
-    if x['validation'] == "1" and len(all_row_cell_values) == 0:
+    if str(x['validation']) == "1" and len(all_row_cell_values) == 0:
         print('{} has {} phenotype information but will not be included '
               'even though it has a validated variant: {}\n'.format(x['Sample'], len(all_row_cell_values),
                                                                     x['validation']))

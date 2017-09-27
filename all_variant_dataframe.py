@@ -33,10 +33,11 @@ def cohort_all_variants(phenotype, genotype, cohort):
     return clean_variants
 
 def clean_all_var_df(df, three_categories=True):
-    ''' A basic cleaning up of the all variants data. '''
+    ''' Clean up of the all variants data. '''
     df['Dup'] = df.apply(lambda x: mark_duplicate_samples(x, df), axis=1)
     df = df[~df['Dup'].str.contains("Duplicate")]
     df = conversion.convert2numeric(df, ['age at diagnosis'])
+    # rename_columns performed in merge_genotype_phenotype
     df = rename.rename_columns(df)
     df = rename.rename_entries(df)
     df = nc.create_new_columns(df, three_categories)

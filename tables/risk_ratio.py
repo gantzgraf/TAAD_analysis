@@ -43,7 +43,7 @@ def risk_ratio_table(df, outfile=None):
                         'RR(95% CI)', 'P-Value']
     rr_table = rr_table.set_index('')
     rr_table = rename_index(rr_table)
-    print('The risk ratio row for syndromic is calculated for MFS only')
+    print('\nINFO: The risk ratio row for syndromic is calculated for MFS only')
     if outfile:
         rr_table.to_csv(outfile)
     return rr_table

@@ -1,7 +1,4 @@
 import pandas as pd
-import os
-
-FILE_PATH = os.path.dirname(os.path.abspath("__file__"))+"/"
 
 def merge_survival_data(df, yale_survival):
     ''' Merge most_damaging data with Yale survival data'''

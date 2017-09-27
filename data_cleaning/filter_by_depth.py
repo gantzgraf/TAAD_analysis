@@ -1,11 +1,12 @@
-''' filter_by_depth() and it's helper functions allows one to filter genotype data by a sequencing depth threshold'''
+''' filter_by_depth() and it's helper functions allows one to filter genotype data by a given sequencing depth threshold'''
 import numpy as np
 import pandas as pd
 import os
 
 def filter_by_depth(df, depth_path, sample_column, depth_column, threshold, excluded_columns):
-    ''' Alter the columns in a row to NaN if the sample does not meet 
-        the minimum depth threshold.
+    ''' Alter the genotype columns to NaN for the samples that do not meet 
+        the minimum depth threshold and those that still contain false positives 
+        as their most damaging variants.
       
     Args:
       depth_path: dir containing depth files
@@ -50,10 +51,10 @@ def prepare_depth_df(file_path):
 
 def merge_depth_data(file_path, UK=True):
     ''' Find, open and concatenate the depth data for each sample in a
-      given cohort.
+        given cohort.
 
     Args:
-      UK; if True then merge the UK data, else Yale data
+      UK: if True then merge the UK data, else Yale data
 
     Returns:
       concatenated DataFrame where each sample is reffered to multiple
@@ -103,7 +104,7 @@ def recalculate_depth(df):
 
 def genotype_by_depth(df, depth_df, sample_column, depth_column, threshold, excluded_columns):
     ''' Alter the columns in a row to NaN if the sample does not meet the minimum
-      depth threshold.
+      depth threshold or still have false positive variants as their most damaging.
     '''
     # create a depth column that details whether the depth is above or below the threshold
     df['Depth'] = df.apply(lambda x: depth_status(x, depth_df, threshold, sample_column, depth_column), axis=1)
@@ -115,7 +116,7 @@ def genotype_by_depth(df, depth_df, sample_column, depth_column, threshold, excl
     # This way they will be included in the phenotype plots and demographics but not in the plots
     # concerning variant info
     df.loc[df.Depth == 'LOW', genotype_columns] = np.nan
-    print("{} have not passed the % above 49 reads".format(df[df['Depth'] == 'LOW'].shape[0]))
+    print("\nINFO: {} have not passed the % above 49 reads".format(df[df['Depth'] == 'LOW'].shape[0]))
 
     # SKI EXON 1 & AB < 0.3
     # change genotype to np.nan for these samples (this is after a next most damaging variant has been sought)

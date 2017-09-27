@@ -4,7 +4,8 @@ from data_cleaning import rename
 
 def merge_genotype_phenotype(phenotype, genotype):
     ''' Clean genotype and phenotype data and merge them
-        on sample
+        on sample.
+
     Args:
         phenotype: path to phenotype data
         genotype: path to genotype data
@@ -17,7 +18,7 @@ def merge_genotype_phenotype(phenotype, genotype):
 def clean_phenotype_data(phenotype):
     ''' Clean the phenotype data.
     Args: 
-        phenotype: path to data
+        phenotype: path to phenotype file
     '''
     unwanted_char = {' ':'', '-':'', '\'':''}
     name_corrections = {'24SA1565': '21SA1565', '24SS1575': '21SS1575', 
@@ -42,7 +43,7 @@ def clean_genotype_data(genotype):
     ''' Clean the genotype data and filter for the
         genotype columns of interest
     Args:
-        genotype: path to genotype
+        genotype: path to genotype file
     '''
     genotype_columns = ['Sample', 'AD', 'AB', 'UID', 'validation', 
                         'Category', 'Score','Symbol', 'HGVS', 'Chrom', 

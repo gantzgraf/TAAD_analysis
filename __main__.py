@@ -11,11 +11,11 @@ import plots.all_variants_plots as avp
 import pandas as pd
 import os
 
-FILE_PATH = os.path.dirname(os.path.abspath("__file__"))+"/TAAD_analysis/"
 pd.set_option('display.max_columns', 500)
 
 def main(yale_phenotype, yale_all_variants, yale_most_damaging,
-         uk_phenotype, uk_all_variants, uk_most_damaging, yale_survival):
+         uk_phenotype, uk_all_variants, uk_most_damaging, yale_survival,
+         FILE_PATH):
     ''' Create, merge and clean variant CSV files and utilise the resulting
         DataFrames to produce cleaned data, tables and plots within the output
         directory.
@@ -26,7 +26,7 @@ def main(yale_phenotype, yale_all_variants, yale_most_damaging,
     all_variants.reset_index(inplace=True)
     most_damaging = md.create_most_damaging(UK_all_variants, uk_most_damaging, uk_phenotype,
                                             Yale_all_variants, yale_most_damaging, yale_phenotype,
-                                            yale_survival)
+                                            yale_survival, FILE_PATH)
     all_variants.to_csv(FILE_PATH+"/output/cleaned_data/All_Variants.csv")
 
     most_damaging.to_csv(FILE_PATH+"/output/cleaned_data/Most_Damaging.csv")
@@ -91,6 +91,7 @@ def plots(most_damaging):
 
 
 if __name__ == '__main__':
+    FILE_PATH = os.path.dirname(os.path.abspath("__file__"))+"/TAAD_analysis/"
     ipath = FILE_PATH+'input_files/'
 
     yale_phenotype = ipath+'Yale_Phenotype_Data.csv'
@@ -103,4 +104,5 @@ if __name__ == '__main__':
     uk_most_damaging = ipath+'UK_Most_Damaging_Data.csv'
 
     main(yale_phenotype, yale_all_variants, yale_most_damaging, 
-         uk_phenotype, uk_all_variants, uk_most_damaging, yale_survival)
+         uk_phenotype, uk_all_variants, uk_most_damaging, yale_survival,
+         FILE_PATH)
