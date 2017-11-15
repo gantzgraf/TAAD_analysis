@@ -33,6 +33,9 @@ def main(yale_phenotype, yale_all_variants, yale_most_damaging,
     most_damaging = md.create_most_damaging(UK_all_variants, uk_most_damaging, uk_phenotype,
                                             Yale_all_variants, yale_most_damaging, yale_phenotype,
                                             yale_survival, FILE_PATH)
+    # need to filter on depth so that we only calculate risks etc. on samples 
+    # we have sequenced successfully
+    most_damaging = most_damaging[most_damaging['Depth'] != 'LOW']
     # output both DataFrames as CSV file
     all_variants.to_csv(FILE_PATH+"/output/cleaned_data/All_Variants.csv")
     most_damaging.to_csv(FILE_PATH+"/output/cleaned_data/Most_Damaging.csv")
