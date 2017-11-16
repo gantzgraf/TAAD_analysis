@@ -18,7 +18,9 @@ Usage: $0 variant_list.txt [ExAC VCF]
 
 Your variant list should contain two columns - one for gene name and the other
 for the HGVSc notation. If an ExAC VCF is provided, allele frequencies will 
-also be reported.
+also be reported. This script is designed to work with the following ExAC VCF:
+ftp://ftp.broadinstitute.org/pub/ExAC_release/release1/ExAC.r1.sites.vep.vcf.gz
+
 EOT
     ;
 }
