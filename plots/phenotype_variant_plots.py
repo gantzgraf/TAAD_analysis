@@ -57,15 +57,18 @@ def variant_class_violin(df, column, title='', outfile=None):
     benign = df[df['New Category'] == "Likely Benign / No Variant"][column].dropna()
 
     # Get unpaired ranksum wilcoxon p-values between each new category and place them upon the plot
-    path_ben_p_val = str(pm.RoundToSigFigs(stats.ranksums(pathogenic, benign)[1] ,3))
+    #path_ben_p_val = str(pm.RoundToSigFigs(stats.ranksums(pathogenic, benign)[1] ,3))
+    path_ben_p_val = str.format("{:.3g}", stats.ranksums(pathogenic, benign)[1])
     pm.line_between_plots(ax, x1=0, x2=2, height=benign.max()+15, 
                         string="p = "+path_ben_p_val, fontsize=15)
 
-    path_dam_p_val = str(pm.RoundToSigFigs(stats.ranksums(pathogenic, damaging)[1], 3))
+    #path_dam_p_val = str(pm.RoundToSigFigs(stats.ranksums(pathogenic, damaging)[1], 3))
+    path_dam_p_val = str.format("{:.3g}", stats.ranksums(pathogenic, damaging)[1])
     pm.line_between_plots(ax, x1=0, x2=1,height=benign.max()+10, 
                         string="p = "+path_dam_p_val, fontsize=15)
 
-    dam_ben_p_val = str(pm.RoundToSigFigs(stats.ranksums(damaging, benign)[1], 3))
+    #dam_ben_p_val = str(pm.RoundToSigFigs(stats.ranksums(damaging, benign)[1], 3))
+    dam_ben_p_val = str.format("{:.3g}", stats.ranksums(damaging, benign)[1])
     pm.line_between_plots(ax, x1=1, x2=2, height=benign.max()+5, 
                         string="p = "+dam_ben_p_val, fontsize=15)
 
@@ -115,7 +118,7 @@ def age_group_v_pathogenic_piechart(df, outfile=None):
     contingency_table = table.unstack().values.tolist()
     chi2, pvalue, dof, expected = stats.chi2_contingency(contingency_table)
     pm.line_between_plots(axs=ax, x1=0, x2=2.5, height=1.5, fontsize=15, extend=0.2,
-                          string="p = {}".format(pm.RoundToSigFigs(pvalue, 2)))
+                          string="p = {:.2g}".format(pvalue))
     if outfile:
         ax.figure.savefig(outfile)
     
