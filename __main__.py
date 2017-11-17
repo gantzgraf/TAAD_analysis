@@ -70,12 +70,12 @@ def plots(most_damaging):
                              outfile=plot_path+'Age at Diagnosis Vs Family History.png')
     pvp.variant_class_violin(df=most_damaging, 
                              column='age at diagnosis',
-                             title='Age at Diagnosis Vs Variant Class',
+                             #title='Age at Diagnosis Vs Variant Class',
                              outfile=plot_path+\
                              'Age at Diagnosis Vs Variant Class.png')
     pvp.variant_class_violin(df=no_mfs,
                              column='age at diagnosis',
-                             title='Age at Diagnosis Vs Variant Class - No MFS',
+                             #title='Age at Diagnosis Vs Variant Class - No MFS',
                              outfile=plot_path+\
                              'Age at Diagnosis Vs Variant Class - No MFS.png')
     pvp.age_group_v_pathogenic_piechart(df=most_damaging,
