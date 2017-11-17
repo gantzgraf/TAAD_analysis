@@ -19,7 +19,7 @@ open my $UK, "<:encoding(utf8)", $uk or die "Could not open $uk: $!";
 my $header = $csv->getline($UK);
 while ( my $row = $csv->getline($UK) ) {
     $row->[0] =~ s/\s//g;
-    if ($row->[0] =~ /^(\d{2})\w+(\d{4})/){
+    if ($row->[0] =~ /^(\d{2})[A-Z]+(\d{4})/){
         my $id = "UK_$1_$2";
         if (exists $uk_pheno{$id}){
             warn "Duplicate ID '$id' ($row->[0])\n";
@@ -37,7 +37,7 @@ close $UK;
 open my $YALE, "<:encoding(utf8)", $yale or die "Could not open $yale: $!";
 while ( my $row = $csv->getline($YALE) ) {
     $row->[0] =~ s/\s//g;
-    if ($row->[0] =~ /^(\w+_)?(\d+_\d+)/){
+    if ($row->[0] =~ /^([A-Z]+_)?(\d+_\d+(_\d+)?)/){
         my $id = "Y_$2";
         if (exists $yale_pheno{$id}){
             warn "Duplicate ID '$id' ($row->[0])\n";
@@ -61,7 +61,8 @@ my @pheno_fields = ("Primary Diagnosis  indication for surgery: Aneurysm / Disse
                     "Location of Primary Diagnosis  Ascending, Arch, Descending, Thoracoabdominal, Infrarenal",
                     "Maximal Aortic Size (cm) ",
                     );
-print join("\t", (  "Primary Diagnosis", 
+print join("\t", (  "ID",
+                    "Primary Diagnosis", 
                     "Clinical Diagnosis",
                     "Family History",
                     "Age at Diagnosis",
@@ -88,9 +89,30 @@ while(my $l = <$SAMP>){
         }
     }else{
         foreach my $p (@pheno_fields){
-            push @row, $hash_ref->{$id}->{$p};
+            if ($p eq "Location of Primary Diagnosis  Ascending, Arch, ".
+                      "Descending, Thoracoabdominal, Infrarenal"
+            ){
+                push @row, transform_location($hash_ref->{$id}->{$p});
+                
+            }else{
+                push @row, $hash_ref->{$id}->{$p} || 'N/A';
+            }
         }
     }
     print join("\t", @row) . "\n";
 }
 close $SAMP;
+
+#################################################
+sub transform_location{
+    #standardise location value
+    my $loc = shift;
+    if ($loc =~ /Ascending|Arch/i){
+        return "Ascending/Arch";
+    }elsif ($loc =~ /Descending|Thoracoabdominal|Infrarenal/i){
+        return "Descending/Thoracoabdominal";
+    }else{
+        warn "Could not parse location value '$loc'\n";
+        return "PARSE_ERROR";
+    }
+}
