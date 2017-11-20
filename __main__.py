@@ -4,6 +4,7 @@ import tables.variant_table as vt
 import tables.variant_summary as vs
 import tables.risk_ratio as rr
 import tables.demographics as demo
+import tables.at_risk_subset as ar
 # from plots.all_variants_plots import all_variants_barplot
 import plots.phenotype_gene_plots as pgp
 import plots.phenotype_variant_plots as pvp
@@ -42,6 +43,7 @@ def main(yale_phenotype, yale_all_variants, yale_most_damaging,
     # used most damaging DataFrame to produce plots and tables
     tables(most_damaging, all_variants)
     plots(most_damaging)
+    ar.at_risk_indvidiuals(most_damaging, FILE_PATH+"/output/tables/At_Risk.csv")
 
 def tables(most_damaging, all_variants):
     ''' Create all the tables for the manuscript '''
