@@ -34,6 +34,7 @@ def cohort_all_variants(phenotype, genotype, cohort):
 
 def clean_all_var_df(df, three_categories=True):
     ''' Clean up of the all variants data. '''
+    df = df[df['Symbol'] != 'SMAD4'] #SMAD4 should be ignored
     df['Dup'] = df.apply(lambda x: mark_duplicate_samples(x, df), axis=1)
     df = df[~df['Dup'].str.contains("Duplicate")]
     df = conversion.convert2numeric(df, ['age at diagnosis'])
